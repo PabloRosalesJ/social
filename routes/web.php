@@ -6,7 +6,8 @@ Route::get('/', function (){
     return view('welcome');
 });
 
-Route::post('/statuses', 'StatusesController@store')->name('statuses.store');
+Route::get('/statuses', 'StatusesController@index')->name('statuses.index');
+Route::post('/statuses', 'StatusesController@store')->name('statuses.store')->middleware('auth');
 
 Auth::routes();
 

@@ -3,9 +3,8 @@
 namespace Tests\Feature;
 
 use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CreateStatusTest extends TestCase
 {
@@ -32,18 +31,16 @@ class CreateStatusTest extends TestCase
         ]);
 
         $reponse->assertJson([
-            'body' => 'First status'
+            'data' => ['body' => 'First status']
         ]);
 
         $this->assertDatabaseHas('statuses', [
             'user_id' => $user->id,
             'body' => 'First status',
         ]);
-
     }
 
     /** @test */
-
     public function a_status_requires_a_body()
     {
         $user = factory(User::class)->create();
@@ -59,7 +56,6 @@ class CreateStatusTest extends TestCase
     }
 
     /** @test */
-
     public function a_status_body_require_minimum_length()
     {
         $user = factory(User::class)->create();
