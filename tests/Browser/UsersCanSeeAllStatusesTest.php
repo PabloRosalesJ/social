@@ -2,10 +2,11 @@
 
 namespace Tests\Browser;
 
-use App\Model\Status;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Laravel\Dusk\Browser;
+use App\User;
+use App\Models\Status;
 use Tests\DuskTestCase;
+use Laravel\Dusk\Browser;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class UsersCanSeeAllStatusesTest extends DuskTestCase
 {
@@ -17,11 +18,13 @@ class UsersCanSeeAllStatusesTest extends DuskTestCase
      */
     public function users_can_see_all_users_on_homepage()
     {
-        $statuses = factory(Status::class, 4)->create();
+        $statuses = factory(Status::class, 4)->create(['created_at' => now()->subMinute()]);
+        $user = factory(User::class)->create();
 
-        $this->browse(function (Browser $browser) use ($statuses) {
+        $this->browse(function (Browser $browser) use ($user, $statuses) {
 
-            $browser->visit('/')
+            $browser->loginAs($user)
+                ->visit('/')
                 ->waitForText($statuses->first()->body);
 
             foreach ($statuses as $status) {

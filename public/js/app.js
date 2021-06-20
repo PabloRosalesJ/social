@@ -1929,6 +1929,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "",
   data: function data() {
@@ -1945,9 +1948,7 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         EventBuss.$emit("status-created", result.data.data);
         _this.body = "";
-      })["catch"](function (err) {
-        console.log(err.message);
-      });
+      })["catch"](function (err) {});
     }
   }
 });
@@ -1963,6 +1964,39 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2006,7 +2040,20 @@ __webpack_require__.r(__webpack_exports__);
     EventBuss.$on("status-created", function (status) {
       _this.statuses.unshift(status);
     });
-    console.log(this.user);
+  },
+  methods: {
+    like: function like(status) {
+      axios.post("/statuses/".concat(status.id, "/likes")).then(function (result) {
+        status.is_liked = true;
+        status.likes_count++;
+      })["catch"](function (err) {});
+    },
+    unlike: function unlike(status) {
+      axios["delete"]("/statuses/".concat(status.id, "/likes")).then(function (result) {
+        status.is_liked = false;
+        status.likes_count--;
+      })["catch"](function (err) {});
+    }
   }
 });
 
@@ -37728,7 +37775,10 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "btn btn-primary", attrs: { id: "create-status" } },
-        [_vm._v("Guardar")]
+        [
+          _c("i", { staticClass: "fa fa-paper-plane" }),
+          _vm._v("\n        Publicar\n      ")
+        ]
       )
     ])
   },
@@ -37736,7 +37786,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("p", { staticClass: "text-center" }, [
+    return _c("h4", { staticClass: "text-center" }, [
       _vm._v("Debes hacer "),
       _c("a", { attrs: { href: "/login" } }, [_vm._v("login")]),
       _vm._v(".")
@@ -37778,7 +37828,9 @@ var render = function() {
                 attrs: {
                   width: "40px",
                   height: "40px",
-                  src: "https://dummyimage.com/40x40/5e6e9e/ffffff&text=P%20R"
+                  src:
+                    "https://dummyimage.com/500x500/5e6e9e/ffffff&text=" +
+                    status.user_name[0]
                 }
               }),
               _vm._v(" "),
@@ -37796,7 +37848,61 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("p", { domProps: { textContent: _vm._s(status.body) } })
-          ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass:
+                "\n        card-footer\n        p-2\n        d-flex\n        justify-content-between\n        align-items-center\n      ",
+              on: { click: _vm.redirecIfGuest }
+            },
+            [
+              status.is_liked
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-link btn-small",
+                      attrs: { dusk: "unlike-btn" },
+                      on: {
+                        click: function($event) {
+                          return _vm.unlike(status)
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "fa fa-thumbs-up text-primary" }),
+                      _vm._v(" "),
+                      _c("strong", [_vm._v("TE GUSTA")])
+                    ]
+                  )
+                : _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-link btn-small",
+                      attrs: { dusk: "like-btn" },
+                      on: {
+                        click: function($event) {
+                          return _vm.like(status)
+                        }
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "far fa-thumbs-up text-primary" }),
+                      _vm._v("\n        ME GUSTA\n      ")
+                    ]
+                  ),
+              _vm._v(" "),
+              _c("div", { staticClass: "text-secondary mr-2" }, [
+                _c("i", { staticClass: "far fa-thumbs-up" }),
+                _vm._v(" "),
+                _c("span", {
+                  attrs: { dusk: "likes_count" },
+                  domProps: { textContent: _vm._s(status.likes_count) }
+                })
+              ])
+            ]
+          )
         ]
       )
     }),
@@ -50262,6 +50368,16 @@ module.exports = {
     },
     isAuthenticated: function isAuthenticated() {
       return !!_user.content;
+    },
+    guest: function guest() {
+      return !this.isAuthenticated;
+    }
+  },
+  methods: {
+    redirecIfGuest: function redirecIfGuest() {
+      if (this.guest) {
+        return window.location.href = '/login';
+      }
     }
   }
 };

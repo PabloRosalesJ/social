@@ -4,7 +4,7 @@ namespace Tests\Unit\Http\Resource;
 
 use App\Http\Resources\StatusResource;
 use Tests\TestCase;
-use App\Model\Status;
+use App\Models\Status;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class StatusResourceTest extends TestCase
@@ -19,6 +19,11 @@ class StatusResourceTest extends TestCase
         $status = factory(Status::class)->create();
 
         $statusResource = StatusResource::make($status)->resolve();
+
+        $this->assertEquals(
+            $status->id,
+            $statusResource['id']
+        );
 
         $this->assertEquals(
             $status->body,
@@ -38,6 +43,16 @@ class StatusResourceTest extends TestCase
         $this->assertEquals(
             $status->created_at->diffForHumans(),
             $statusResource['ago']
+        );
+
+        $this->assertEquals(
+            false,
+            $statusResource['is_liked']
+        );
+
+        $this->assertEquals(
+            0,
+            $statusResource['likes_count']
         );
     }
 }

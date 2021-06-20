@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\StatusResource;
-use App\Model\Status;
+use App\Models\Status;
 use Illuminate\Http\Request;
 
 class StatusesController extends Controller

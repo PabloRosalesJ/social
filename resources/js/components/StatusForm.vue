@@ -10,12 +10,15 @@
         ></textarea>
       </div>
       <div class="card-footer">
-        <button class="btn btn-primary" id="create-status">Guardar</button>
+        <button class="btn btn-primary" id="create-status">
+          <i class="fa fa-paper-plane"></i>
+          Publicar
+        </button>
       </div>
     </form>
 
     <div class="card-body" v-else>
-      <p class="text-center">Debes hacer <a href="/login">login</a>.</p>
+      <h4 class="text-center">Debes hacer <a href="/login">login</a>.</h4>
     </div>
   </div>
 </template>
@@ -37,9 +40,7 @@ export default {
           EventBuss.$emit("status-created", result.data.data);
           this.body = "";
         })
-        .catch((err) => {
-          console.log(err.message);
-        });
+        .catch((err) => {});
     },
   },
 };
