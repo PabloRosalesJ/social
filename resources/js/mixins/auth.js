@@ -2,7 +2,7 @@ let user = document.head.querySelector('meta[name="user"]')
 
 module.exports = {
     computed: {
-        user() {
+        currentUser() {
             if (this.isAuthenticated) {
                 return JSON.parse(user.content);
             }

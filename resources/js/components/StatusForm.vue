@@ -6,7 +6,7 @@
           v-model="body"
           class="form-control border-0"
           name="body"
-          :placeholder="`¿Qué estas pensando ${user.name}`"
+          :placeholder="`¿Qué estas pensando ${currentUser.name}`"
         ></textarea>
       </div>
       <div class="card-footer">
